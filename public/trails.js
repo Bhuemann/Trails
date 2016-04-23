@@ -36,6 +36,8 @@ canvas,	  /* HTMLCanvas */
 ctx,	  /* CanvasRenderingContext2d */
 keystate, /* Object, used for keyboard inputs */
 flip,
+p1name,
+p2name,
 frames,   /* number, used for animation */
 score2,
 score;	  /* number, keep track of the player score */
@@ -176,6 +178,8 @@ function main() {
 	});
 
 	// intatiate game objects and starts the game loop
+	p1name = prompt("Player 1, please enter your name" , "player 1");
+	p2name = prompt("Player 2, please enter your name" , "player 2")
 	init();
 	loop();
 }
@@ -378,10 +382,10 @@ function draw() {
 					ctx.fillStyle = "#00f";
 					break;
 				case SNAKEH:
-					ctx.fillStyle = "#f00";
+					ctx.fillStyle = "#0aa";
 					break;
 				default:
-					ctx.fillStyle = "#0f0";
+					ctx.fillStyle = "#40a";
 			}
 			ctx.fillRect(x*tw, y*th, tw, th);
 		}
@@ -389,8 +393,8 @@ function draw() {
 	// changes the fillstyle once more and draws the score
 	// message to the canvas
 	ctx.fillStyle = "#000";
-	ctx.fillText("PLAYER 2 SCORE: " + score2, 10, canvas.height-10);
-	ctx.fillText("PLAYER 1 SCORE: " + score, 10, canvas.height-30);
+	ctx.fillText("PLAYER 2: "+p2name+" SCORE: " + score2, 10, canvas.height-10);
+	ctx.fillText("PLAYER 1: "+p1name+" SCORE: " + score, 10, canvas.height-30);
 }
 
 // start and run the game
