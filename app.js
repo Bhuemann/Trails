@@ -28,128 +28,89 @@ app.listen(appEnv.port, '0.0.0.0', function() {
   console.log("server starting on " + appEnv.url);
 });
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , userlist = require('./routes/userlist')
-  , newuser = require('./routes/newuser')
-  , adduser = require('./routes/adduser')
-  , changeuser = require('./routes/changeuser')
-  , updateuser = require('./routes/updateuser')
-  , remuser = require('./routes/remuser')
-  , deleteuser = require('./routes/deleteuser')
-  , http = require('http')
-  , path = require('path');
-
-var mongodb = require('mongodb');
-
-var port = (process.env.VCAP_APP_PORT || 1337);
-var host = (process.env.VCAP_APP_HOST || '0.0.0.0');
-
-var app = express();
-app.configure(function(){
-app.set('port', port);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
-
-// Invoke the appropriate Express middleware
-app.get('/', routes.index);
-app.get('/users', user.list);
-app.get('/helloworld', routes.index);
-app.get('/userlist', userlist.list);
-app.get('/newuser', newuser.list);
-app.post('/adduser',adduser.list);
-app.get('/changeuser', changeuser.list);
-app.post('/updateuser', updateuser.list);
-app.get('/remuser', remuser.list);
-app.post('/deleteuser',deleteuser.list);
-
-
-if (process.env.VCAP_SERVICES) {
-	  var env = JSON.parse(process.env.VCAP_SERVICES);
-	  if (env['mongodb-2.2']) {
-		var mongo = env['mongodb-2.2'][0]['credentials'];
-	  }
-	} else {
-		   var mongo = {
-		      "username" : "user1",
-		      "password" : "secret",
-		      "url" : "mongodb://user1:secret@localhost:27017/test"
-	 }
-}
-// Set our internal DB variable
-var mycallback = function(err,results) {
-    console.log("mycallback");
-    if(err) throw err;
-};
-
-var MongoClient = mongodb.MongoClient;
-var db= MongoClient.connect(mongo.url, function(err, db) {
-  if(err) {
-    console.log("failed to connect to the database");
+var mongo = process.env.VCAP_SERVICES;
+var port = process.env.PORT || 3030;
+var conn_str = "";
+if (mongo) {
+  var env = JSON.parse(mongo);
+  if (env['mongodb-2.4']) {
+    mongo = env['mongodb-2.4'][0]['credentials'];
+    if (mongo.url) {
+      conn_str = mongo.url;
+    } else {
+      console.log("No mongo found");
+    }  
   } else {
-    console.log("connected to database");
+    conn_str = 'mongodb://<user>:<password>@aws-us-east-1-portal.16.dblayer.com:10299/Trails';
   }
+} else {
+  conn_str = 'mongodb://<user>:<password>@aws-us-east-1-portal.16.dblayer.com:10299/Trails';
+}
+
+var MongoClient = require('mongodb').MongoClient;
+var db; 
+MongoClient.connect(conn_str, function(err, database) {
+  if(err) throw err;
+  db = database;
 }); 
 
-//Make our db accessible to our router
-app.use(function(req,res,next){
-  req.db = db; // Does not seem to be used
-  next();
+var express = require('express');
+var app = express();
+
+app.get('/', function (req, res) {
+  res.write('Two APIs are provided: "/api/insertMessage" and "/api/render"' + "\n"
+    + 'When "/api/insertMessage" is called, messages will be written to database' + "\n"
+    + 'When "/api/render" is called, the inserted message will be shown');
+  res.end();	
 });
 
-// Create Web server and listen on port 1337
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
- 
-  if (process.env.VCAP_SERVICES) {
-	  var env = JSON.parse(process.env.VCAP_SERVICES);
-	  if (env['mongodb-2.2']) {
-		var mongo = env['mongodb-2.2'][0]['credentials'];
-	  }
-	} else {
-		   var mongo = {
-		      "username" : "han308",
-		      "password" : "11OE4444",
-		      "url" : "mongodb://<user>:<password>@aws-us-east-1-portal.16.dblayer.com:10299,aws-us-east-1-portal.15.dblayer.com:10286/Trails"
-	 }
-}
-
-var mycallback = function(err,results) {
-    console.log("mycallback");
-    if(err) throw err;
-};
-// Setup connection to DB
-var MongoClient = mongodb.MongoClient;
-var db= MongoClient.connect(mongo.url, function(err, db) {
-  if(err) {
-    console.log("failed to connect to the database");
+app.get('/api/insertMessage', function (req, res) {
+  var message = { 'message': 'Hello, Bluemix', 'ts': new Date() };
+  if (db && db !== "null" && db !== "undefined") {
+    db.collection('messages').insert(message, {safe:true}, function(err){
+      if (err) { 
+        console.log(err.stack);
+        res.write('mongodb message insert failed');
+        res.end(); 
+      } else {
+        res.write('following messages has been inserted into database' + "\n" 
+        + JSON.stringify(message));
+        res.end();
+      }
+    });    
   } else {
-    console.log("connected to database");
-  }
-  var collection = db.collection('Score');
-  
-  //Clear DB and insert 3 records
-  collection.remove(mycallback);
-  var user1 = { "FirstName" : "Tinniam", "LastName" : "Ganesh","Mobile": "916732177728" };
-  var user2 = { "FirstName" : "Darth", "LastName" : "Vader","Mobile": "6666699999" };
-  var user3 = { "FirstName" : "Bill", "LastName" : "Shakespeare","Mobile": "8342189991" };
-  collection.insert(user1,function(err,result){});
-  collection.insert(user2,function(err,result){});
-  collection.insert(user3,function(err,result){});
-  collection.find().toArray(function(err, items) {
-  	
-  }); 
- }); 
+    res.write('No mongo found');
+    res.end();
+  } 
 });
+
+app.get('/api/render', function (req, res) {
+  if (db && db !== "null" && db !== "undefined") {
+    // list messages
+    db.collection('messages').find({}, {limit:10, sort:[['_id', 'desc']]}, function(err, cursor) {
+      if (err) {
+        console.log(err.stack); 
+        res.write('mongodb message list failed');
+        res.end();
+      } else {
+        cursor.toArray(function(err, items) {
+          if (err) {
+            console.log(err.stack); 
+            res.write('mongodb cursor to array failed');
+            res.end();
+          } else {
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            for (i=0; i < items.length; i++) {
+              res.write(JSON.stringify(items[i]) + "\n");
+            }
+            res.end();
+          }
+        });
+      }
+    });     
+  } else {
+    res.write('No mongo found');
+    res.end();  
+  }
+});
+app.listen(port);
