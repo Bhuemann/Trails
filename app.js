@@ -3,6 +3,7 @@
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
+/*
 var mongo = process.env.VCAP_SERVICES;
 var port = process.env.PORT || 3030;
 var conn_str = "";
@@ -20,7 +21,7 @@ if (mongo) {
   }
 } else {
   conn_str = 'mongodb://localhost:27017';
-=======
+
 require('http').createServer(function(req, res) {
 if ( typeof mongodb !== 'undefined' && mongodb ) {
 // Perform CRUD operations through REST APIs
@@ -105,10 +106,7 @@ app.get('/api/render', function (req, res) {
   }
 });
 app.listen(port);
-
-/*
-=======
->>>>>>> origin/master
+*/
 
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
@@ -134,4 +132,3 @@ app.listen(appEnv.port, '0.0.0.0', function() {
   console.log("server starting on " + appEnv.url);
 });
 
-*/
