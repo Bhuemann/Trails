@@ -3,29 +3,28 @@
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-
-var options = {
-    mongos: {
-        ssl: true,
-        sslValidate: false,
-    }
+require('http').createServer(function(req, res) {
+if ( typeof mongodb !== 'undefined' && mongodb ) {
+// Perform CRUD operations through REST APIs
+if(req.method == 'POST') {
+insert_records(req,res);
 }
+else if(req.method == 'GET') {
+list_records(req,res);
+}
+else if(req.method == 'PUT') {
+update_records(req,res);
+}
+else if(req.method == 'DELETE') {
+delete_record(req,res);
+}
+} else {
+res.writeHead(200, {'Content-Type': 'text/plain'});
+res.write("No MongoDB service instance is bound.\n");
+res.end();
+}
+}).listen(port, host);
 
-MongoClient.connect(process.env.MONGODB_URL, options, function(err, db) {
-    assert.equal(null, err);
-    db.listCollections({}).toArray(function(err, collections) {
-        assert.equal(null, err);
-        collections.forEach(function(collection) {
-            console.log(collection);
-        });
-        db.close();
-        process.exit(0);
-    })
-});
-
-/*
 
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
@@ -51,4 +50,3 @@ app.listen(appEnv.port, '0.0.0.0', function() {
   console.log("server starting on " + appEnv.url);
 });
 
-*/
