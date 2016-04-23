@@ -362,11 +362,11 @@ function update() {
 		}
 
 		if ((score + score2) > 800) {
-			gameover(score,score2);
+			return gameover(score,score2);
 		}
 
-		if (flip>200){
-			gameover(score,score2);
+		else if (flip>200){
+			return gameover(score,score2);
 		}
 
 		grid.set(SNAKEH, nx, ny);
