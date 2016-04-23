@@ -3,6 +3,7 @@
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
+<<<<<<< HEAD
 var mongo = process.env.VCAP_SERVICES;
 var port = process.env.PORT || 3030;
 var conn_str = "";
@@ -20,8 +21,31 @@ if (mongo) {
   }
 } else {
   conn_str = 'mongodb://localhost:27017';
+=======
+require('http').createServer(function(req, res) {
+if ( typeof mongodb !== 'undefined' && mongodb ) {
+// Perform CRUD operations through REST APIs
+if(req.method == 'POST') {
+insert_records(req,res);
+>>>>>>> origin/master
 }
+else if(req.method == 'GET') {
+list_records(req,res);
+}
+else if(req.method == 'PUT') {
+update_records(req,res);
+}
+else if(req.method == 'DELETE') {
+delete_record(req,res);
+}
+} else {
+res.writeHead(200, {'Content-Type': 'text/plain'});
+res.write("No MongoDB service instance is bound.\n");
+res.end();
+}
+}).listen(port, host);
 
+<<<<<<< HEAD
 var express = require('express');
 var app = express();
 
@@ -84,6 +108,8 @@ app.get('/api/render', function (req, res) {
 app.listen(port);
 
 /*
+=======
+>>>>>>> origin/master
 
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
