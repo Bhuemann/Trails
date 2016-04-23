@@ -3,7 +3,29 @@
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
 
+var options = {
+    mongos: {
+        ssl: true,
+        sslValidate: false,
+    }
+}
+
+MongoClient.connect(process.env.MONGODB_URL, options, function(err, db) {
+    assert.equal(null, err);
+    db.listCollections({}).toArray(function(err, collections) {
+        assert.equal(null, err);
+        collections.forEach(function(collection) {
+            console.log(collection);
+        });
+        db.close();
+        process.exit(0);
+    })
+});
+
+/*
 
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
@@ -29,3 +51,4 @@ app.listen(appEnv.port, '0.0.0.0', function() {
   console.log("server starting on " + appEnv.url);
 });
 
+*/
