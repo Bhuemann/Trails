@@ -3,7 +3,6 @@
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
-<<<<<<< HEAD
 var mongo = process.env.VCAP_SERVICES;
 var port = process.env.PORT || 3030;
 var conn_str = "";
