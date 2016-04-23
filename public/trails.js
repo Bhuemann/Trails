@@ -197,12 +197,37 @@ function init() {
 	var sp = {x:Math.floor(COLS/2), y:ROWS-1};
 	var sp2 = {x:COLS-1, y:Math.floor(ROWS/2)};
 	snake.init(UP, sp.x, sp.y);
-	snake.direction = UP;
 	snake2.init(LEFT, sp2.x, sp2.y);
-	snake2.direction = LEFT;
 	grid.set(SNAKE2, sp2.x, sp2.y);
 	grid.set(SNAKE, sp.x, sp.y);
 
+}
+
+function gameover(x,y) {
+	if (x > y){
+		// player 1 won
+		if (x == 10000) {
+			// player 2 hit the wall
+			alert("Gameover, "+p1name+" wins because " +p2name+" hit the wall!");
+		} else {
+			// player 1 won out right
+			alert("Gameover, "+p1name+" wins with " + score +" points!");
+		}
+	} else if (y > x) {
+		// player 2 won
+		if (y == 10000) {
+			// player 1 hit the wall
+			alert("Gameover, "+p2name+" wins because " +p1name+" hit the wall!");
+		} else {
+			// player 2 won out right
+			alert("Gameover, "+p2name+" wins with " + score2 +" points!");
+		}
+	} else {
+		// TIE??
+		alert("This is a TIE");
+	}
+
+	location.reload(true);
 }
 
 /**
@@ -257,7 +282,7 @@ function update() {
 	}
 
 	// each five frames update the game state.
-	if (frames%4 === 0) {
+	if (frames%5 === 0) {
 		// pop the last element from the snake queue i.e. the
 		// head
 		var nx = snake.last.x;
@@ -304,15 +329,13 @@ function update() {
 		if (0 > nx || nx > grid.width-1  ||
 			0 > ny || ny > grid.height-1 
 		) {
-			alert("Gameover, "+p2name+" wins");
-			return init();
+			gameover(10000,0);
 		}
 
 		if (0 > nx2 || nx2 > grid.width-1  ||
 			0 > ny2 || ny2 > grid.height-1 
 		) {
-			alert("Gameover, "+p1name+" wins");
-			return init();
+			gameover(0,10000);
 		}
 		// add a snake id at the new position and append it to 
 		// the snake queue
@@ -320,6 +343,7 @@ function update() {
 		if (grid.get(nx, ny) === EMPTY) {
 			score++;
 		} else if (grid.get(nx, ny) === SNAKE2) {
+			flip++;
 			score++;
 			score2--;
 		}
@@ -330,6 +354,7 @@ function update() {
 		if (grid.get(nx2, ny2) === EMPTY) {
 			score2++;
 		}else if (grid.get(nx2, ny2) === SNAKE) {
+			flip++;
 			score2++;
 			score--;
 		} else {
@@ -337,19 +362,11 @@ function update() {
 		}
 
 		if ((score + score2) > 800) {
-			if (score > score2) {
-				//player 1 wins
-				alert("Gameover, "+p1name+" wins");
-				return init();
-			} else if (score < score2) {
-				//player 2 wins
-				alert("Gameover, "+p2name+" wins");
-				return init();
-			} else {
-				alert("Gameover, TIE");
-				return init();
-				//tie!
-			}
+			gameover(score,score2);
+		}
+
+		if (flip>200){
+			gameover(score,score2);
 		}
 
 		grid.set(SNAKEH, nx, ny);
@@ -385,16 +402,20 @@ function draw() {
 					ctx.fillStyle = "#0aa";
 					break;
 				default:
-					ctx.fillStyle = "#40a";
+					ctx.fillStyle = "#a0a";
 			}
 			ctx.fillRect(x*tw, y*th, tw, th);
 		}
 	}
 	// changes the fillstyle once more and draws the score
 	// message to the canvas
-	ctx.fillStyle = "#000";
+	
+	ctx.fillStyle = "#00f";
 	ctx.fillText("PLAYER 2: "+p2name+" SCORE: " + score2, 10, canvas.height-10);
+	ctx.fillStyle = "#0ff";
 	ctx.fillText("PLAYER 1: "+p1name+" SCORE: " + score, 10, canvas.height-30);
+	ctx.fillStyle = "#000";
+	ctx.fillText("Flips: "+flip+"/200", 10, canvas.height-50);
 }
 
 // start and run the game
