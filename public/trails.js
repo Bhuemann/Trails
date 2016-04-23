@@ -199,7 +199,6 @@ function init() {
 	grid.set(SNAKE2, sp2.x, sp2.y);
 	grid.set(SNAKE, sp.x, sp.y);
 
-	//setFood();
 }
 
 /**
