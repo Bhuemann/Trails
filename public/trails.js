@@ -178,8 +178,8 @@ function main() {
 	});
 
 	// intatiate game objects and starts the game loop
-	p1name = prompt("Player 1, please enter your name" , "player 1");
-	p2name = prompt("Player 2, please enter your name" , "player 2")
+	p1name = prompt("Player 1, please enter your name. \nYou will be light blue and you will start on the bottom" , "player 1");
+	p2name = prompt("Player 2, please enter your name. \nYou will be dark blue and you will start on the right" , "player 2")
 	init();
 	loop();
 }
