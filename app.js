@@ -3,9 +3,8 @@
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
-/*
 var mongo = process.env.VCAP_SERVICES;
-//var port = process.env.PORT || 3030;
+var port = process.env.PORT || 3030;
 var conn_str = "";
 if (mongo) {
   var env = JSON.parse(mongo);
@@ -17,10 +16,10 @@ if (mongo) {
       console.log("No mongo found");
     }  
   } else {
-    conn_str = 'mongodb://<user>:<password>@aws-us-east-1-portal.16.dblayer.com:10299/Trails';
+    conn_str = 'mongodb://localhost:10286';
   }
 } else {
-  conn_str = 'mongodb://<user>:<password>@aws-us-east-1-portal.16.dblayer.com:10299/Trails';
+  conn_str = 'mongodb://localhost:10286';
 }
 
 var MongoClient = require('mongodb').MongoClient;
@@ -89,8 +88,8 @@ app.get('/api/render', function (req, res) {
     res.end();  
   }
 });
-//app.listen(port);
-*/
+app.listen(port);
+/*
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
 var express = require('express');
@@ -115,3 +114,4 @@ app.listen(appEnv.port, '0.0.0.0', function() {
   console.log("server starting on " + appEnv.url);
 });
 
+*/
