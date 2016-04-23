@@ -304,14 +304,14 @@ function update() {
 		if (0 > nx || nx > grid.width-1  ||
 			0 > ny || ny > grid.height-1 
 		) {
-			alert("Gameover, player 2 wins");
+			alert("Gameover, "+p2name+" wins");
 			return init();
 		}
 
 		if (0 > nx2 || nx2 > grid.width-1  ||
 			0 > ny2 || ny2 > grid.height-1 
 		) {
-			alert("Gameover, player 1 wins");
+			alert("Gameover, "+p1name+" wins");
 			return init();
 		}
 		// add a snake id at the new position and append it to 
@@ -339,11 +339,11 @@ function update() {
 		if ((score + score2) > 800) {
 			if (score > score2) {
 				//player 1 wins
-				alert("Gameover, player 1 wins");
+				alert("Gameover, "+p1name+" wins");
 				return init();
 			} else if (score < score2) {
 				//player 2 wins
-				alert("Gameover, player 2 wins");
+				alert("Gameover, "+p2name+" wins");
 				return init();
 			} else {
 				alert("Gameover, TIE");
