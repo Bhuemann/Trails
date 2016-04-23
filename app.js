@@ -3,6 +3,7 @@
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
+/*
 var mongo = process.env.VCAP_SERVICES;
 //var port = process.env.PORT || 3030;
 var conn_str = "";
@@ -89,16 +90,17 @@ app.get('/api/render', function (req, res) {
   }
 });
 //app.listen(port);
+*/
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
-//var express = require('express');
+var express = require('express');
 
 // cfenv provides access to your Cloud Foundry environment
 // for more info, see: https://www.npmjs.com/package/cfenv
 var cfenv = require('cfenv');
 
 // create a new express server
-//var app = express();
+var app = express();
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
