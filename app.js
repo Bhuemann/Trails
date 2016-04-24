@@ -134,33 +134,25 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 });
 
 var MONGODB_URL="mongodb://han308:11OE4444@aws-us-east-1-portal.16.dblayer.com:10299/Trails"
-var mongoose = require('mongoose');
-var assert = require('assert');
-var fs = require('fs');
 
-var ca = [fs.readFileSync(__dirname + "/servercert.crt")];
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
 
 var options = {
     mongos: {
         ssl: true,
-        sslValidate: true,
-        sslCA:ca,
+        sslValidate: false,
     }
 }
 
-// If the connection throws an error
-mongoose.connection.on('error',function (err) {
-  console.log('Mongoose default connection error: ' + err);
-});
-
-mongoose.connection.on('open', function (err) {
+MongoClient.connect(process.env.MONGODB_URL, options, function(err, db) {
     assert.equal(null, err);
-    mongoose.connection.db.listCollections().toArray(function(err, collections) {
+    db.listCollections({}).toArray(function(err, collections) {
         assert.equal(null, err);
         collections.forEach(function(collection) {
             console.log(collection);
         });
-        mongoose.connection.db.close();
+        db.close();
         process.exit(0);
     })
 });
