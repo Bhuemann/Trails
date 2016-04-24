@@ -432,7 +432,7 @@ function createChunks(x,y) {
 	var th = canvas.height/grid.height;
 	ctx.fillStyle = "#000";
 	
-	gen = Math.floor((x*y)*0.10);
+	gen = Math.floor((x*y)*0.03);
 	var amt = 0
 	while(amt != gen){
 		randX = Math.floor((Math.random() * y) + 1);
