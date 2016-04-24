@@ -12,8 +12,5 @@
 	"repository": {},
 	"engines": {
 		"node": "4.2.x"
-	} 
-	"scripts": {
-      "start": "trails.js"
-  }
+	}
 }

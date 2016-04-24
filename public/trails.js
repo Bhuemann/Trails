@@ -12,6 +12,7 @@ SNAKEH = 3,
 SNAKE2 = 4,
 SNAKEH2 = 5,
 FRUIT = 2,
+CHUNK = 6,
 
 LEFT  = 0,
 UP    = 1,
@@ -40,8 +41,8 @@ p1name,
 p2name,
 frames,   /* number, used for animation */
 score2,
-score;	  /* number, keep track of the player score */
-
+score,	  /* number, keep track of the player score */
+m;
 
 /**
  * Grid datastructor, usefull in games where the game world is
@@ -200,7 +201,8 @@ function init() {
 	snake2.init(LEFT, sp2.x, sp2.y);
 	grid.set(SNAKE2, sp2.x, sp2.y);
 	grid.set(SNAKE, sp.x, sp.y);
-
+	
+	createChunks(ROWS-1, COLS-1);
 }
 
 function gameover(x,y) {
@@ -291,8 +293,7 @@ function update() {
 		var nx2 = snake2.last.x;
 		var ny2 = snake2.last.y;
 
-		grid.set(SNAKE, nx, ny);
-		grid.set(SNAKE2, nx2, ny2);
+		
 
 		// updates the position depending on the snake direction
 		switch (snake.direction) {
@@ -325,41 +326,50 @@ function update() {
 				break;
 		}
 
-		// checks all gameover conditions || grid.get(nx, ny) === SNAKE
-		if (0 > nx || nx > grid.width-1  ||
-			0 > ny || ny > grid.height-1 
-		) {
-			gameover(10000,0);
-		}
-
-		if (0 > nx2 || nx2 > grid.width-1  ||
-			0 > ny2 || ny2 > grid.height-1 
-		) {
-			gameover(0,10000);
-		}
-		// add a snake id at the new position and append it to 
-		// the snake queue
-
-		if (grid.get(nx, ny) === EMPTY) {
-			score++;
-		} else if (grid.get(nx, ny) === SNAKE2) {
-			flip++;
-			score++;
-			score2--;
-		}
-		else {
+		
+		if(grid.get(nx, ny) != CHUNK){
+			grid.set(SNAKE, snake.last.x, snake.last.y);
 			
-		}
-
-		if (grid.get(nx2, ny2) === EMPTY) {
-			score2++;
-		}else if (grid.get(nx2, ny2) === SNAKE) {
-			flip++;
-			score2++;
-			score--;
-		} else {
+			// checks all gameover conditions || grid.get(nx, ny) === SNAKE
+			if (0 > nx || nx > grid.width-1  ||
+				0 > ny || ny > grid.height-1 
+			) {
+				gameover(10000,0);
+			}
 			
+			if (grid.get(nx, ny) === EMPTY) {
+				score++;
+			} else if (grid.get(nx, ny) === SNAKE2) {
+				flip++;
+				score++;
+				score2--;
+			}
+
+			grid.set(SNAKEH, nx, ny);
+			snake.insert(nx, ny);
 		}
+		
+		if(grid.get(nx2, ny2) != CHUNK){
+			grid.set(SNAKE2, snake2.last.x, snake2.last.y);
+			
+			if (0 > nx2 || nx2 > grid.width-1  ||
+				0 > ny2 || ny2 > grid.height-1 
+			) {
+				gameover(0,10000);
+			}
+
+			if (grid.get(nx2, ny2) === EMPTY) {
+				score2++;
+			}else if (grid.get(nx2, ny2) === SNAKE) {
+				flip++;
+				score2++;
+				score--;
+			}
+			
+			grid.set(SNAKEH2, nx2, ny2);
+			snake2.insert(nx2, ny2);
+		}
+	
 
 		if ((score + score2) > 800) {
 			return gameover(score,score2);
@@ -369,10 +379,7 @@ function update() {
 			return gameover(score,score2);
 		}
 
-		grid.set(SNAKEH, nx, ny);
-		grid.set(SNAKEH2, nx2, ny2);
-		snake2.insert(nx2, ny2);
-		snake.insert(nx, ny);
+
 	}
 }
 
@@ -391,6 +398,9 @@ function draw() {
 			switch (grid.get(x, y)) {
 				case EMPTY:
 					ctx.fillStyle = "#fff";
+					break;
+				case CHUNK:
+				    ctx.fillStyle = "#000";
 					break;
 				case SNAKE:
 					ctx.fillStyle = "#0ff";
@@ -417,7 +427,22 @@ function draw() {
 	ctx.fillStyle = "#000";
 	ctx.fillText("Flips: "+flip+"/200", 10, canvas.height-50);
 }
-
+function createChunks(x,y) {
+	var tw = canvas.width/grid.width;
+	var th = canvas.height/grid.height;
+	ctx.fillStyle = "#000";
+	
+	gen = Math.floor((x*y)*0.03);
+	var amt = 0
+	while(amt != gen){
+		randX = Math.floor((Math.random() * y) + 1);
+		randY = Math.floor((Math.random() * x) + 1);
+		ctx.fillRect(randY*tw, randX*th, tw, th);
+		grid.set(CHUNK, randX, randY);
+		amt++;
+	}
+}
+ 
 // start and run the game
 //main();
 
