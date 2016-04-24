@@ -157,7 +157,7 @@ MongoClient.connect(process.env.MONGODB_URL, options, function(err, db) {
     })
 });
 */
-/*
+
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var url = 'mongodb://han308:11OE4444@aws-us-east-1-portal.16.dblayer.com:10299/Trails';
@@ -166,7 +166,7 @@ MongoClient.connect(url, function(err, db) {
   console.log("Connected correctly to server.");
   db.close();
 });
-*/
+
 /*
 var MONGODB_URL="mongodb://han308:11OE4444@aws-us-east-1-portal.16.dblayer.com:10299/Trails"
 
