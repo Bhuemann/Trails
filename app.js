@@ -132,6 +132,15 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 	// print a message when the server starts listening
   console.log("server starting on " + appEnv.url);
 });
+
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var url = 'mongodb://han308:11OE4444@aws-us-east-1-portal.16.dblayer.com:10299/Trails';
+MongoClient.connect(url, function(err, db) {
+  assert.equal(null, err);
+  console.log("Connected correctly to server.");
+  db.close();
+});
 /*
 var MONGODB_URL="mongodb://han308:11OE4444@aws-us-east-1-portal.16.dblayer.com:10299/Trails"
 
