@@ -329,7 +329,6 @@ function update() {
 		
 		if(grid.get(nx, ny) != CHUNK){
 			grid.set(SNAKE, snake.last.x, snake.last.y);
-			grid.set(SNAKE2, snake2.last.x, snake2.last.y);
 			
 			// checks all gameover conditions || grid.get(nx, ny) === SNAKE
 			if (0 > nx || nx > grid.width-1  ||
@@ -351,6 +350,7 @@ function update() {
 		}
 		
 		if(grid.get(nx2, ny2) != CHUNK){
+			grid.set(SNAKE2, snake2.last.x, snake2.last.y);
 			
 			if (0 > nx2 || nx2 > grid.width-1  ||
 				0 > ny2 || ny2 > grid.height-1 
