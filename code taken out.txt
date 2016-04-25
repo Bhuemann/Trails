@@ -1,0 +1,51 @@
+ <div class="">
+        <img class="newappIcon" src="images/newapp-icon.png" />
+        <h1>
+					Welcome to the <span class="blue">PHP MySQL Sample</span> on Bluemix!
+				</h1>
+        <p class="description">This introductory sample allows you to insert messages into a MySQL database. <br>
+
+
+            <input type="button" class = "mybutton" onclick="window.location = 'init.php';" class="btn" value="(Re-)Create table"></input></p>
+            </br>
+
+    
+    <table id='notes' class='records'><tbody>
+        
+        <?php
+            echo "<tr>\n";
+            while ($property = mysqli_fetch_field($result)) {
+                    echo '<th>' .  $property->name . "</th>\n"; //the headings
+
+            }
+            echo "</tr>\n";
+
+            mysqli_data_seek ( $result, 0 );
+            if($result->num_rows == 0){ //nothing in the table
+                        echo '<td>Empty!</td>';
+            }
+                
+            while ( $row = mysqli_fetch_row ( $result ) ) {
+                echo "<tr>\n";
+                for($i = 0; $i < mysqli_num_fields ( $result ); $i ++) {
+                    echo '<td>' . "$row[$i]" . '</td>';
+                }
+                echo "</tr>\n";
+            }
+
+            $result->close();
+            mysqli_close();
+        ?>
+        <tr>
+            <form method = "POST"> <!--FORM: will submit to same page (index.php), and if ($_SERVER["REQUEST_METHOD"] == "POST") will catch it --> 
+                <td colspan = "2">
+                <input type = "text" style = "width:100%" name = "message" autofocus onchange="saveChange(this)" onkeydown="onKey(event)"></input>
+                </td>
+                <td>
+                    <button class = "mybutton" type = "submit">Add New Message</button></td></tr>
+                </td> 
+            </form>
+        </tr>
+        </tbody>
+    </table>
+    </div>

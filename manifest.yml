@@ -1,8 +1,13 @@
+---
+declared-services:
+  php-mysql-db:
+    label: cleardb
+    plan: spark
 applications:
-- path: .
-  memory: 256M
+- disk_quota: 256M
+  name: php-mysql-hongda-1350
   instances: 1
-  domain: mybluemix.net
-  name: Trails
-  host: trails
-  disk_quota: 1024M
+  memory: 256M
+  services:
+    - php-mysql-db
+  host: php-mysql-hongda-1350

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Snake-splatoon Game</title>
+	    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link rel = "stylesheet" href = "index.css">
+	<!-- Basic styling, centering of the canvas. -->
+	<style>
+	canvas {
+		display: block;
+		position: absolute;
+		border: 1px solid #000;
+		margin: auto;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+	}
+	</style>
+
+	<script src="trails.js"></script>
+	
+</head>
+<body>
+
+<div id = "intro">
+	    <button onclick="main()" class="startGame" id="startG">Start Game</button>
+	  	<h3 id = "aboutG">Welcome to Trails by Xu Han, Hongda Zeng, and Ben Huemann. The goal of this game is to have the longest trail left on the board. Similar to that of a snake game, your body will permanently leave marks after you pass through, but others can overwrite the mark with their own color!
+	  	</h3>
+	  	<h4> Player 1 move with WASD</h4>
+	  	<h4> Player 2 move with arrow keys</h4>
+</div>
+</body>
+</html>
